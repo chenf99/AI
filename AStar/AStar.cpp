@@ -10,19 +10,19 @@ using std::endl;
 也就是每个数字前面比它大的数字的个数的和，称为这个状态的逆序。
 
 若两个状态的逆序奇偶性 相同，则可相互到达，否则不可相互到达。 
-
-由于目标状态逆序为7(奇数)，因此逆序为奇数的状态有解
 */
 
 bool AStar::solvable(string digital) {
-    int count = 0;
+    int count1 = 0, count2 = 0;
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < i; ++j) {
             if (digital[i] != '0' && digital[j] > digital[i]) 
-                count++;
+                count1++;
+            if (goal[i] != '0' && goal[j] > goal[i])
+                count2++;
         }
     }
-    return (count % 2 == 1);
+    return (count1 % 2 == count2 % 2);
 }
 
 //输出矩阵形式的节点的八数码状态
@@ -124,7 +124,12 @@ stack<string> AStar::getPath(Node* n) {
     return path;
 }
 
-void AStar::AStarSearch() {
+int AStar::evaluation(int select, string digital) {
+    return (select == 1) ? evaluation1(digital) : evaluation2(digital);
+}
+
+//参数表示选择哪种评估函数
+void AStar::AStarSearch(int select) {
     cout << "初始八数码状态:";
     print(start);
     //首先判断是否有解
@@ -138,7 +143,7 @@ void AStar::AStarSearch() {
     vector<Node*> open = {}, close = {};
 
     //生成初始状态
-    Node* S0 = new Node(start, NULL, {}, {}, 1, evaluation2(start));
+    Node* S0 = new Node(start, NULL, {}, {}, 1, evaluation(select, start));
     open.push_back(S0);
 
     //存放成功的路径的栈
@@ -223,7 +228,7 @@ void AStar::AStarSearch() {
                 }
                 //后继不在open表也不在close表
                 if (isInGraph == false) {
-                    Node* child = new Node(successor, n, precursor, {}, n->depth + 1, evaluation2(successor));
+                    Node* child = new Node(successor, n, precursor, {}, n->depth + 1, evaluation(select, successor));
                     n->successor.push_back(child);
                     open.push_back(child);
                 }

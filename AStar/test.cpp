@@ -3,5 +3,5 @@
 
 int main() {
     AStar astar;
-    astar.AStarSearch();
+    astar.AStarSearch(2);
 }
