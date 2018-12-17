@@ -36,6 +36,7 @@ public class Main extends JFrame{
 	//构造图形化界面
     // 构造函数
     public Main() {
+    	aStar = new AStar(startStr);
         // 创建组件
     	jpControl = new JPanel();
     	jpDigital = new JPanel();
@@ -99,15 +100,20 @@ public class Main extends JFrame{
 			public void actionPerformed(ActionEvent e) {				
 				//随机生成初始状态并显示
 				StringBuilder sb = new StringBuilder(startStr);
-				for (int i = 0; i < 9; ++i) {
-					int a = (int)(Math.random() * 9);
-					int b = (int)(Math.random() * 9);
-					char tmp = sb.charAt(a);
-					sb.setCharAt(a, sb.charAt(b));
-					sb.setCharAt(b, tmp);
+				int count = 0;
+				while (count != 5) {
+					for (int i = 0; i < 9; ++i) {
+						int a = (int)(Math.random() * 9);
+						int b = (int)(Math.random() * 9);
+						char tmp = sb.charAt(a);
+						sb.setCharAt(a, sb.charAt(b));
+						sb.setCharAt(b, tmp);
+					}
+					startStr = sb.toString();
+					if (aStar.solvable(startStr)) break;
+					count++;
 				}
-				startStr = sb.toString();
-				printStr(startStr);				
+				printStr(startStr);
 			}
 		});
 		
