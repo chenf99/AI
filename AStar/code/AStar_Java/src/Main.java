@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Main extends JFrame{
-	String startStr = "283164705";
+	String startStr = "854321607";//"854321607";"108534726"
 	AStar aStar;
-	Stack<String> result;
+	Stack<Node> result;
 	
 	//定义组件
 	JPanel jpControl, jpDigital;
@@ -91,6 +91,8 @@ public class Main extends JFrame{
 
         // 显示
         this.setVisible(true);
+        //设置窗口大小不可变
+        this.setResizable(false);
     }
     
     private void addClickListener() {
@@ -136,8 +138,15 @@ public class Main extends JFrame{
 					public void run() {
 						randomBtn.setEnabled(false);
 						startBtn.setEnabled(false);
+						System.out.println("最佳路径:");
 						while (!result.empty()) {
-							printStr(result.pop());
+							System.out.print("节点:");
+							aStar.print(result.peek().digital);
+							int depth = result.peek().depth;
+							int eval = result.peek().eval;
+							System.out.println("评估函数值: g: " + depth + " h: " + eval + " f: " + (depth + eval) + "\n");
+							printStr(result.peek().digital);
+							result.pop();
 							try {
 								Thread.sleep(500);
 							} catch (InterruptedException e) {

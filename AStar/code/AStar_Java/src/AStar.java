@@ -54,7 +54,7 @@ public class AStar {
 	    int eval = 0;
 	    //估计放错位置的数字个数
 	    for (int i = 0; i < 9; ++i) {
-	        if (digital.charAt(i) != end.charAt(i)) eval++;
+	        if (digital.charAt(i) != end.charAt(i) && digital.charAt(i) != '0') eval++;
 	    }
 	    return eval;
 	}
@@ -64,7 +64,7 @@ public class AStar {
 	int evaluation2(String digital) {
 	    int eval = 0;
 	    for (int i = 0; i < 9; ++i) {
-	        if (digital.charAt(i) != end.charAt(i)) {
+	        if (digital.charAt(i) != end.charAt(i) && digital.charAt(i) != '0') {
 	            for (int j = 0; j < 9; ++j) {
 	                if (digital.charAt(i) == end.charAt(j)) {
 	                    //x为横坐标，y为纵坐标
@@ -130,10 +130,10 @@ public class AStar {
 	}
 	
 	//回溯得到成功的路径
-	Stack<String> getPath(Node n) {
-	    Stack<String> path = new Stack<>();
+	Stack<Node> getPath(Node n) {
+	    Stack<Node> path = new Stack<>();
 	    while (n != null) {
-	        path.push(n.digital);
+	        path.push(n);
 	        n = n.parent;
 	    }
 	    return path;
@@ -144,8 +144,8 @@ public class AStar {
 	}
 	
 	//参数表示选择哪种评估函数
-	Stack<String> AStarSearch(int select) {
-	    System.out.println("初始八数码状态");
+	Stack<Node> AStarSearch(int select) {
+	    System.out.printf("初始八数码状态");
 	    print(start);
 	    //首先判断是否有解
 	    if (solvable(start) == false) {
@@ -163,7 +163,7 @@ public class AStar {
 	    open.add(S0);
 
 	    //存放成功的路径的栈
-	    Stack<String> path;
+	    Stack<Node> path;
 
 	    while (true) {
 	        //失败退出
@@ -171,17 +171,24 @@ public class AStar {
 	            System.out.println("搜索失败");
 	            return null;
 	        }
-
-	        //在open表上取f值最小的节点n
-	        //n放入close表，并从open表移除
+	        
 	        Collections.sort(open);
+	        //输出open表节点数、总扩展的节点数h和评估函数值最小的节点
+	        System.out.println("open表节点数: " + open.size());
+	        System.out.println("总扩展节点数: " + (open.size() + close.size()));
+	        
+	        //在open表上取f值最小的节点n
+	        //n放入close表，并从open表移除	        
 	        Node n = open.get(0);
+	        System.out.print("评估函数值最小的节点: ");
+	        print(n.digital);
+	        System.out.println("评估函数值: " + (n.depth + n.eval) + "\n");
 	        open.remove(0);
 	        close.add(n);
 	        
 	        //若n是目标状态，则成功退出
 	        if (n.digital.equals(end)) {
-	            System.out.println("搜索成功");
+	            System.out.println("\n搜索成功");
 	            //从n开始回溯得到路径
 	            path = getPath(n);
 	            break;
@@ -276,7 +283,13 @@ public class AStar {
 			System.out.println(stack.pop());
 		}
 		*/
-		Stack<String> path = aStar.AStarSearch(2);
-		while (!path.empty()) aStar.print(path.pop());
+		Stack<Node> path = aStar.AStarSearch(1);
+		System.out.println("最佳路径:");
+		while (!path.empty()) {
+			System.out.print("节点:");
+			aStar.print(path.peek().digital);
+			System.out.println("评估函数值: g: " + path.peek().depth + " h: " + path.peek().eval + "\n");
+			path.pop();
+		}
 	}
 }
