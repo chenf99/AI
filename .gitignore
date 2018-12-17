@@ -32,3 +32,10 @@
 *.exe
 *.out
 *.app
+
+AStar_Java/bin/
+
+*.settings/
+*.classpath
+*.project
+*.metadata
