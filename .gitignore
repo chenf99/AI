@@ -39,3 +39,4 @@ AStar_Java/bin/
 *.classpath
 *.project
 *.metadata
+*.class
