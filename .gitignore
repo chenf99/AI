@@ -33,7 +33,7 @@
 *.out
 *.app
 
-AStar_Java/bin/
+AStar/code/AStar_Java/bin/
 
 *.settings/
 *.classpath
