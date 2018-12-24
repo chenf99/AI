@@ -67,9 +67,13 @@ public class LS {
 	
 	// Õ¹Ê¾Â·¾¶
 	public void showPath(int[] path_) {
+		System.out.println("[Result] " + getPathLen(path_, datas));
+		double eff = ((getPathLen(path_, datas)/9352) - 1) * 100;
+		System.out.println("[Effect] " + eff);
+		System.out.println("[Path] ");
 		for(int i = 0; i < path_.length-1; i++) {
 			System.out.print(String.format(path_[i] + "->"));
-			if(i % 10 == 9) System.out.println();
+			//if(i % 10 == 9) System.out.println();
 		}
 		System.out.println(path_[path_.length-1]);
 	}

@@ -46,34 +46,43 @@ public class MainUI extends JFrame implements ActionListener {
 	public TSPUI lstspui;
 	public LS ls;
 	
+	public JFrame gaf;
+	public TSPUI gatspui;
+	public GA ga;
+	
 	
 	public MainUI() {
 		
 		jb1 = new JButton("LS");
 		jb2 = new JButton("SA");
+		jb3 = new JButton("GA");
 		//jb4 = new JButton("GA");
 		
 		//设置监听
 		jb1.addActionListener(this);
 		jb2.addActionListener(this);
+		jb3.addActionListener(this);
 		//jb3.addActionListener(this);
 		//jb4.addActionListener(this);
 		
 		jp1 = new JPanel();
 		jp2 = new JPanel();
+		jp3 = new JPanel();
 		jp1.add(jb1);
 		jp2.add(jb2);
+		jp3.add(jb3);
 		
 		this.add(jp1);
 		this.add(jp2);
+		this.add(jp3);
 		
 		
 		//设置布局管理器  
-        this.setLayout(new GridLayout(2,1,100,30));  
+        this.setLayout(new GridLayout(3,1,200,30));  
         //给窗口设置标题  
         this.setTitle("人工智能TSP");  
         //设置窗体大小  
-        this.setSize(200,200);  
+        this.setSize(360,240);  
         //设置窗体初始位置  
         //this.setLocation(1000, 150);  
         //设置当关闭窗口时，保证JVM也退出  
@@ -131,7 +140,7 @@ public class MainUI extends JFrame implements ActionListener {
 					path = ls.getPath();
 					lstspui = new TSPUI(datas, path);
 					lsf.getContentPane().add(lstspui);
-					lsf.setSize(1000, 640);
+					lsf.setSize(600, 480);
 					lsf.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 					lsf.setVisible(true);
 					lsf.setResizable(true);
@@ -169,7 +178,6 @@ public class MainUI extends JFrame implements ActionListener {
 				
 			});
 			lsThread.start();
-			
 		}
 		if (c.getActionCommand() == "SA") {
 			jb2.setEnabled(false);
@@ -185,7 +193,7 @@ public class MainUI extends JFrame implements ActionListener {
 					//System.out.println(path.length);
 					tspui = new TSPUI(datas, path);
 					f.getContentPane().add(tspui);
-					f.setSize(1000, 640);
+					f.setSize(600, 480);
 					f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 					f.setVisible(true);
 					f.setResizable(true);
@@ -223,6 +231,59 @@ public class MainUI extends JFrame implements ActionListener {
 				
 			});
 			saThread.start();
+		}
+		
+		if (c.getActionCommand() == "GA") {
+			jb3.setEnabled(false);
+			Thread gaThread = new Thread(new Runnable(){
+				@Override
+				public void run() {
+					gaf = new JFrame();
+					gaf.setTitle("GA算法");
+					System.out.println("-------------GA Solution----------");
+					ga = new GA(datas);
+					int[] path;
+					path = ga.getPath();
+					gatspui = new TSPUI(datas, path);
+					gaf.getContentPane().add(gatspui);
+					gaf.setSize(600, 480);
+					gaf.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+					gaf.setVisible(true);
+					gaf.setResizable(true);
+					Thread updateThread = new Thread(new Runnable(){
+						@Override
+						public void run() {
+							try {
+								while(!ga.getFinished()) {
+									int[] current_path = ga.getPath();
+									Thread.sleep(100);
+									gaf.getContentPane().setVisible(false);
+									gaf.getContentPane().remove(gatspui);
+									gatspui = new TSPUI(datas, current_path);
+									gaf.getContentPane().add(gatspui);
+									gaf.getContentPane().repaint();
+									gaf.getContentPane().setVisible(true);
+								}
+								int[] current_path = ga.getPath();
+								gaf.getContentPane().setVisible(false);
+								gaf.getContentPane().remove(gatspui);
+								gatspui = new TSPUI(datas, current_path);
+								gaf.getContentPane().add(gatspui);
+								gaf.getContentPane().repaint();
+								gaf.getContentPane().setVisible(true);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					updateThread.start();
+					ga.evolution();
+					jb3.setEnabled(true);
+					JOptionPane.showConfirmDialog(null, "GA", "完成演绎", JOptionPane.CANCEL_OPTION);
+				}
+				
+			});
+			gaThread.start();
 		}
 	}
 }

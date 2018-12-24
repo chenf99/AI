@@ -26,7 +26,7 @@ public class SA {
 		isFinished = false;
 		//System.out.println("------Len: " + getPathLen(path, datas) + "------");
 		//System.out.println("------Len: " + getPathLen(path, datas) + "------");
-		showPath(path);
+		//showPath(path);
 	}
 	
 	public void search() {
@@ -44,8 +44,8 @@ public class SA {
 				q = 0.995;
 			}
 			
-			System.out.println("------T: " + T + "------");
-			System.out.println("------Len: " + getPathLen(path, datas) + "------");
+			//System.out.println("------T: " + T + "------");
+			//System.out.println("------Len: " + getPathLen(path, datas) + "------");
 			//showPath(path);
 			
 			for(int i = 0; i < L; i++) {
@@ -72,12 +72,14 @@ public class SA {
 			count++;
 		}
 		isFinished = true;
-		System.out.println("count: " + count);
+		//System.out.println("count: " + count);
 		Date end = new Date();
 		long dur = end.getTime() - begin.getTime();
-		System.out.println("Time: " + dur);
+		System.out.println("[Time] " + dur + "ms");
+		System.out.println("[Result] " + getPathLen(path, datas));
 		double eff = ((getPathLen(path, datas)/9352) - 1) * 100;
-		System.out.println("Eff: " + eff + "%");
+		System.out.println("[Effect] " + eff + "%");
+		System.out.println("[Path] ");
 		showPath(path);
 	}
 	
@@ -85,7 +87,7 @@ public class SA {
 	public void showPath(int[] path_) {
 		for(int i = 0; i < path_.length-1; i++) {
 			System.out.print(String.format(path_[i] + "->"));
-			if(i % 10 == 9) System.out.println();
+			//if(i % 10 == 9) System.out.println();
 		}
 		System.out.println(path_[path_.length-1]);
 	}

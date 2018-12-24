@@ -40,10 +40,13 @@ public class Test {
 				else if(i != lines.length-1) System.out.print(lines[i]);
 			}
 			System.out.println("-------------SA Solution----------");
-			SA sa = new SA(datas);
-			sa.search();
+			//SA sa = new SA(datas);
+			//sa.search();
 			System.out.println("-------------LS Solution----------");
 			//LS ls = new LS(datas);
+			System.out.println("-------------GA Solution----------");
+			GA ga = new GA(datas);
+			
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
