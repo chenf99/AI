@@ -260,6 +260,11 @@ public class AStar {
 	                    Node child = new Node(successor, n, precursor, new ArrayList<>(), n.depth + 1, evaluation(select, successor));
 	                    n.successor.add(child);
 	                    open.add(child);
+	                    //验证启发函数的单调性
+	                    if (evaluation(select, successor) + 1 < evaluation(select, n.digital)) {
+	                    	System.err.println("error h");
+	                    	System.exit(1);
+	                    }
 	                }
 	            }
 	        }

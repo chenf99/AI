@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Main extends JFrame{
-	String startStr = "854321607";//"854321607";"108534726"
+	String startStr = "854321607";//"854321607";
 	AStar aStar;
 	Stack<Node> result;
 	
@@ -27,7 +27,7 @@ public class Main extends JFrame{
     int size = 9;
     JButton jbs[] = new JButton[size];
     
-    JButton randomBtn, startBtn;
+    JButton randomBtn, startBtn1, startBtn2;
     
     public JButton getJButtons(int i) {
     	return jbs[i];
@@ -54,11 +54,17 @@ public class Main extends JFrame{
         randomBtn.setForeground(Color.BLACK);
         randomBtn.setFocusPainted(false);
         
-        startBtn = new JButton("start");
-        startBtn.setPreferredSize(new Dimension(150, 30));
-        startBtn.setBackground(Color.ORANGE);
-        startBtn.setForeground(Color.BLACK);
-        startBtn.setFocusPainted(false);
+        startBtn1 = new JButton("start by h1");
+        startBtn1.setPreferredSize(new Dimension(150, 30));
+        startBtn1.setBackground(Color.ORANGE);
+        startBtn1.setForeground(Color.BLACK);
+        startBtn1.setFocusPainted(false);
+        
+        startBtn2 = new JButton("start by h2");
+        startBtn2.setPreferredSize(new Dimension(150, 30));
+        startBtn2.setBackground(Color.ORANGE);
+        startBtn2.setForeground(Color.BLACK);
+        startBtn2.setFocusPainted(false);
         
         // 设置网格布局,这里只有前两个参数（行/列）3和3 的话，网格没有空隙
         jpDigital.setLayout(new GridLayout(3, 3, 10, 10));
@@ -70,8 +76,9 @@ public class Main extends JFrame{
         for (int i = 0; i < size; i++) {
             jpDigital.add(jbs[i]);
         }
-        jpControl.add(randomBtn, BorderLayout.EAST);
-        jpControl.add(startBtn, BorderLayout.SOUTH);
+        jpControl.add(randomBtn, BorderLayout.WEST);
+        jpControl.add(startBtn1, BorderLayout.CENTER);
+        jpControl.add(startBtn2, BorderLayout.EAST);
         
         //添加点击监听器
         addClickListener();
@@ -119,48 +126,62 @@ public class Main extends JFrame{
 			}
 		});
 		
-		startBtn.addActionListener(new ActionListener() {
+		startBtn1.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//开始AStar算法求解八数码
-				aStar = new AStar(startStr);
-				boolean solvable = aStar.solvable(startStr);
-				if (solvable == false) {
-					JOptionPane.showMessageDialog(null, "No Solution", "Info", JOptionPane.INFORMATION_MESSAGE);
-					return;
-				}
-				result = aStar.AStarSearch(2);
-				startStr = aStar.end;
-				//显示结果
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						randomBtn.setEnabled(false);
-						startBtn.setEnabled(false);
-						System.out.println("最佳路径:");
-						while (!result.empty()) {
-							System.out.print("节点:");
-							aStar.print(result.peek().digital);
-							int depth = result.peek().depth;
-							int eval = result.peek().eval;
-							System.out.println("评估函数值: g: " + depth + " h: " + eval + " f: " + (depth + eval) + "\n");
-							printStr(result.peek().digital);
-							result.pop();
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						randomBtn.setEnabled(true);
-						startBtn.setEnabled(true);
-					}
-				}).start();
+				action(1);
+			}
+		});
+		
+		startBtn2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				action(2);
 			}
 		});
 	}
+    
+    void action(int select) {
+    	//开始AStar算法求解八数码
+		aStar = new AStar(startStr);
+		boolean solvable = aStar.solvable(startStr);
+		if (solvable == false) {
+			JOptionPane.showMessageDialog(null, "No Solution", "Info", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+		result = aStar.AStarSearch(select);
+		startStr = aStar.end;
+		//显示结果
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				randomBtn.setEnabled(false);
+				startBtn1.setEnabled(false);
+				startBtn2.setEnabled(false);
+				System.out.println("最佳路径:");
+				while (!result.empty()) {
+					System.out.print("节点:");
+					aStar.print(result.peek().digital);
+					int depth = result.peek().depth;
+					int eval = result.peek().eval;
+					System.out.println("评估函数值: g: " + depth + " h: " + eval + " f: " + (depth + eval) + "\n");
+					printStr(result.peek().digital);
+					result.pop();
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				randomBtn.setEnabled(true);
+				startBtn1.setEnabled(true);
+				startBtn2.setEnabled(true);
+			}
+		}).start();
+    }
     
     void printStr(String str) {
     	for (int i = 0; i < 9; ++i) {
