@@ -46,6 +46,7 @@ public class Test {
 			//LS ls = new LS(datas);
 			System.out.println("-------------GA Solution----------");
 			GA ga = new GA(datas);
+			ga.evolution();
 			
 			
 		} catch (FileNotFoundException e) {
