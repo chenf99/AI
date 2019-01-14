@@ -11,7 +11,7 @@ public class SA {
 	// SA算法中定义的参数
 	private double T0 = 10000;	// 初始温度
 	private double T_end = 1;	// 结束温度
-	private double q = 0.99;	// 降温系数
+	private double q = 0.96;	// 降温系数
 	private int L = 500;		// 每个温度迭代次数，也即链长
 	private volatile int[] path;	// 当前的最佳路径
 	private double T;			// 当前温度	
@@ -29,6 +29,7 @@ public class SA {
 		//showPath(path);
 	}
 	
+	// SA算法搜索过程
 	public void search() {
 		Date begin = new Date();
 		int type, k;
@@ -92,6 +93,7 @@ public class SA {
 		System.out.println(path_[path_.length-1]);
 	}
 	
+	// 随机序列生成初始解
 	public void initPath() {
 		path = Tools.create_random_permutation(datas.size());
 	}

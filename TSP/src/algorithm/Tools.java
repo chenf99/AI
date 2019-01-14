@@ -34,7 +34,7 @@ public class Tools {
 		return true;
 	}
 	
-	// 交叉策略: 片段循环右移一位 -> 三变换法
+	// 交叉策略: 片段循环右移一位 -> 三变换法(放弃使用)
 	public static boolean threeChange(int[] path, int p1, int p2, int p3) {
 		if(p1 >= path.length || p2 >= path.length || p3 >= path.length ||p1 < 0 || p2 < 0 || p3 < 0 || p1 == p2 || p2 == p3 || p1==p3) return false;
 		int u = p1, v = p2, w = p3;
@@ -63,6 +63,7 @@ public class Tools {
 		return true;
 	}
 	
+	// 交叉策略3: 片段循环右移一位
 	public static boolean rightShift(int[] path, int p1, int p2) {
 		if(p1 >= path.length || p2 >= path.length || p1 < 0 || p2 < 0 || p1 == p2) return false;
 		int u = p1, v = p2;

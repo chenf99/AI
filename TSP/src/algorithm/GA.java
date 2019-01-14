@@ -9,13 +9,13 @@ import java.util.Random;
 public class GA {
 	private List<City> datas;	// 城市数据
 	private int cityNum;	// 城市数目
-	private int N = 100;		// 种群大小
+	private int N = 200;		// 种群大小
 	private List<Individual> group;		// 种群
-	private int[] bestPath;
+	private int[] bestPath;				// 当前最优路径
 	private double bestPathLen;			// 最优个体的路径长度
 	private double bestFitness; 		// 最优个体的适应值
-	private int T = 8000; 			// 接受代数
-	private double Pcross = 0.95;		// 交叉概率
+	private int T = 2400; 			// 接受代数
+	private double Pcross = 1;		// 交叉概率
 	private double Pmutation = 0.1;	// 变异概率
 	private List<Individual> new_group;	// 下一代种群
 	private int L = 0;
@@ -25,7 +25,7 @@ public class GA {
 	
 
 	double p;			//概率p
-	boolean isFinished = false;
+	boolean isFinished = false;			// 搜索完成标志
 	
 	// 基于排名的转盘赌选择
 	double a = 1.1;		//参数a		
@@ -47,8 +47,8 @@ public class GA {
 		Date begin = new Date();
 		List<Individual> temp = group;
 		while(++L < T) {
-			System.out.println("-------" + L + "------" + "currentBest: " + group.get(0).len + "--best: " + bestPathLen);
-			if(L%1000==999) showGroup(group);
+			//System.out.println("-------" + L + "------" + "currentBest: " + group.get(0).len + "--best: " + bestPathLen);
+			//if(L%1000==999) showGroup(group);
 			select();
 			cross();
 			mutation();
@@ -211,7 +211,7 @@ public class GA {
 	
 	// 计算选择过程中每个排位个体的选择区间
 	public void initProList() {
-		proList = new double[cityNum];
+		proList = new double[N];
 		double temp = 0;
 		for(int i = 0; i < N; i++) {
 			temp += getProbability(i+1);
