@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cmath>
 #include <algorithm>
+#include <random>
 using namespace std;
 
 #define MAX 80000000
@@ -11,10 +12,26 @@ int pos_diag[2 * MAX - 1]; // 主对角线上的皇后个数
 int neg_diag[2 * MAX - 1]; // 反对角线上的皇后个数
 
 // 生成[0, n - 1]的一个大随机数
-int get_randindex(int n) {
-    int sqrt_n = (int)sqrt(n);
-    int high = rand() % sqrt_n, low = rand() % sqrt_n;
-    return high * sqrt_n + low;
+// int get_randindex(int n) {
+//     int sqrt_n = (int)sqrt(n);
+//     int high = rand() % sqrt_n, low = rand() % sqrt_n;
+//     return high * sqrt_n + low;
+// }
+
+// 更好的生成随机数方法
+unsigned long long int RandSeed = (unsigned)time(NULL);
+unsigned long long int get_randindex(long long int n) {
+	unsigned long long int x;
+	double i;
+	
+	x = 0x7fffffff;
+	x += 1;
+	RandSeed *= ((unsigned long long int)134775813);
+	RandSeed += 1;
+	RandSeed = RandSeed % x;
+	i = ((double)RandSeed) / (double)0x7fffffff;
+	
+	return (unsigned long long int)(n * i);
 }
 
 void random_start(int n) {
